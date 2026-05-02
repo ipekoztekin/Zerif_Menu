@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zerif QR Menü</title>
+
+<style>
+
+body {
+  margin:0;
+  font-family:'Playfair Display', serif;
+  background: linear-gradient(135deg, #f9f6f1 0%, #f1eac0 30%, #e8f5e9 70%, #f9f6f1 100%);
+  color:#2f3e3a;
+  position: relative;
+  min-height:100vh;
+}
+
+/* Çiçek paternleri - çizilmiş gibi */
+body::before {
+  content:"";
+  position:absolute;
+  top:10%;
+  left:5%;
+  width:180px;
+  height:180px;
+  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.05) 41%);
+  border-radius:50%;
+  opacity:0.3;
+}
+
+body::after {
+  content:"";
+  position:absolute;
+  bottom:10%;
+  right:5%;
+  width:220px;
+  height:220px;
+  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.05) 41%);
+  border-radius:50%;
+  opacity:0.3;
+}
+
+/* HEADER */
+.header{text-align:center;padding:25px;}
+.header h1{
+  font-size:2.2em;
+  color:#7cdece;
+  text-shadow:1px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* NAV */
+.nav{display:flex;justify-content:center;gap:10px;}
+.nav button{
+  background:#7cdece;color:rgb(138, 120, 72);border:none;
+  padding:12px 20px;border-radius:25px;cursor:pointer;
+  transition:0.3s;
+}
+.nav button:hover{background:#3a8f7a;}
+
+/* PAGE */
+.page{display:none;padding:20px;}
+.active{display:block}
+
+/* ITEM */
+.item{
+  display:flex;justify-content:space-between;
+  padding:15px;margin:10px 0;
+  background:white;border-radius:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  cursor:pointer;
+}
+
+/* POPUP */
+.popup{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+}
+.popup-box{
+  background:#fffefc;
+  border:3px solid #2f6f64;
+  border-radius:20px;
+  padding:20px;
+  max-width:400px;
+  margin:80px auto;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+#cup svg{width:140px;height:140px;margin:auto;}
+#quote{font-style:italic;color:#555;margin-top:10px;}
+</style>
+</head>
+<body>
+
+<div class="header"><h1>Zerif Menü</h1></div>
+
+<div class="nav">
+<button onclick="page('kahve')">Kahveler</button>
+<button onclick="page('dunya')">Dünya Kahveleri</button>
+<button onclick="page('diger')">Diğer İçecekler & Tatlılar</button>
+<button onclick="page('soguk')">Soğuk İçecekler</button>
+</div>
+
+<!-- KAHVELER -->
+<div id="kahve" class="page active">
+<div class="item" onclick="pop('Espresso','Yoğun kahve | 25–30 ml','130 TL','espresso','Küçük ama güçlü: güne enerjik başla!')">
+Espresso <span>130 TL</span>
+</div>
+<div class="item" onclick="pop('Espresso Doppio','Çift shot espresso | 50–60 ml','140 TL','doppio','İki kat yoğunluk, iki kat motivasyon!')">
+Espresso Doppio <span>140 TL</span>
+</div>
+<div class="item" onclick="pop('Caffè Crema','Hafif kremalı espresso | 120–180 ml','130 TL','crema','Pürüzsüz dokunuş, zarif bir keyif!')">
+Caffè Crema <span>130 TL</span>
+</div>
+<div class="item" onclick="pop('Caffè Grande','Büyük fincan kahve | 240–300 ml','130 TL','grande','Büyük yudumlarla büyük hayaller!')">
+Caffè Grande <span>130 TL</span>
+</div>
+<div class="item" onclick="pop('Caffè XL','Ekstra büyük kahve | 350–450 ml','140 TL','xl','Sınırları zorlayan kahve tutkunlarına!')">
+Caffè XL <span>140 TL</span>
+</div>
+<div class="item" onclick="pop('Cappuccino','Espresso + süt + köpük | 150–180 ml','130 TL','cappuccino','Köpüklerin altında saklı mutluluk!')">
+Cappuccino <span>130 TL</span>
+</div>
+<div class="item" onclick="pop('Latte Macchiato','Katmanlı süt + espresso | 250–300 ml','140 TL','latte','Sanat gibi katman katman lezzet!')">
+Latte Macchiato <span>140 TL</span>
+</div>
+<div class="item" onclick="pop('Caffè Latte','Espresso + bol süt | 240–300 ml','140 TL','latte','Yumuşak içim, huzurlu dakikalar!')">
+Caffè Latte <span>140 TL</span>
+</div>
+</div>
+
+<div id="dunya" class="page">
+  <div class="item" onclick="pop('Americano (İtalya)','Espresso + sıcak su | 150 ml','130 TL','italy','İtalya’nın zarif dokunuşu fincanınızda!')">
+    Americano (İtalya) <span>130 TL</span>
+  </div>
+  <div class="item" onclick="pop('Cafe au Lait (Fransa)','Espresso + süt | 300 ml','140 TL','france','Fransa’nın romantik kahve keyfi!')">
+    Cafe au Lait (Fransa) <span>140 TL</span>
+  </div>
+  <div class="item" onclick="pop('Cold Brew (Amerika)','Soğuk demleme | Orta boy','150 TL','usa','Amerika’nın özgür ruhu buz gibi!')">
+    Cold Brew (Amerika) <span>150 TL</span>
+  </div>
+  <div class="item" onclick="pop('Kleiner Brauner (Avusturya)','Espresso + krema | 60 ml','120 TL','austriaBrauner','Avusturya’nın klasik kahve geleneği!')">
+  Kleiner Brauner (Avusturya) <span>120 TL</span>
+</div>
+
+<div class="item" onclick="pop('Wiener Melange (Avusturya)','Espresso + süt + köpük | 140 ml','130 TL','austriaMelange','Avusturya’nın zarif kahve dokunuşu!')">
+  Wiener Melange (Avusturya) <span>130 TL</span>
+</div>
+
+</div>
+
+<div id="diger" class="page">
+  <div class="item" onclick="pop('Türk Kahvesi Fincan','Yoğun Türk kahvesi | 70 ml','70 TL','turkFincan','Kültürün özü, fincanda saklı!')">
+    Türk Kahvesi Fincan <span>70 TL</span>
+  </div>
+  <div class="item" onclick="pop('Türk Kahvesi Süvari','Yoğun Türk kahvesi | 80 ml','80 TL','suvari','Geleneksel keyif, ince belli bardakta!')">
+    Türk Kahvesi Süvari <span>80 TL</span>
+  </div>
+  <div class="item" onclick="pop('Çay','Demleme çay','30 TL','cay','Sıcak sohbetlerin vazgeçilmezi!')">
+    Çay <span>30 TL</span>
+  </div>
+  <div class="item" onclick="pop('Çay Kupa','Kupa bardakta çay','50 TL','cayKupa','Kocaman yudumlarla huzur!')">
+    Çay Kupa <span>50 TL</span>
+  </div>
+  <div class="item" onclick="pop('Limonata','Ev yapımı | 110 ml','110 TL','limonata','Ferahlık ve enerji bir arada!')">
+    Limonata <span>110 TL</span>
+  </div>
+  <div class="item" onclick="pop('Kutu Kola','Serinletici gazlı içecek','70 TL','cola','Enerjini tazele, serinle!')">
+    Kutu Kola <span>70 TL</span>
+  </div>
+  <div class="item" onclick="pop('Mozaik Pasta','Tatlı zebra desenli pasta','130 TL','mozaik','Tatlı bir nostalji diliminde!')">
+    Mozaik Pasta <span>130 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Tatlı Tuzlu Tabağı','3 tatlı + 3 tuzlu kuru pasta','120 TL','tatliTuzlu','Tatlı ve tuzlu bir şölen!')">
+    Tatlı Tuzlu Tabağı <span>120 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Soda Sade','Doğal maden suyu','30 TL','sodaSade','Serinletici ve doğal!')">
+    Soda Sade <span>30 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Soda Meyveli','Meyve aromalı soda','40 TL','sodaMeyveli','Meyve ferahlığıyla soda!')">
+    Soda Meyveli <span>40 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Churchill','Soda + limon + tuz','90 TL','churchill','Klasik ferahlık, tuzlu dokunuş!')">
+    Churchill <span>90 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Juss Tea Çeşitleri','Soğuk çay çeşitleri','70 TL','jussTea','Çay keyfi, soğuk haliyle!')">
+    Juss Tea Çeşitleri <span>70 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Fuse Tea Çeşitleri','Soğuk çay çeşitleri','90 TL','fuseTea','Enerjik ve ferahlatıcı!')">
+    Fuse Tea Çeşitleri <span>90 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Cappy Meyvesuyu Çeşitleri','Meyve suyu çeşitleri','90 TL','cappy','Doğal meyve lezzeti!')">
+    Cappy Meyvesuyu Çeşitleri <span>90 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Su','Doğal içme suyu','10 TL','su','Hayatın özü, saf su!')">
+    Su <span>10 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Bitki Çayları – French Press','Ihlamur, Adaçayı, Zencefil-Limon','120 TL','bitkiCay','Doğadan gelen şifa!')">
+    Bitki Çayları – French Press <span>120 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Yeşil Çay – French Press','Yeşil çay demleme','100 TL','yesilCay','Ferahlatıcı ve sağlıklı!')">
+    Yeşil Çay – French Press <span>100 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Kupa Bardaklar – Kahve Hediyeli','Kupa bardak + kahve','300 TL','kupaSet','Kupa bardakla kahve keyfi!')">
+    Kupa Bardaklar – Kahve Hediyeli <span>300 TL</span>
+  </div>
+
+  
+</div>
+
+<div id="soguk" class="page">
+  <h2>Soğuk İçecekler</h2>
+
+  <div class="item" onclick="pop('Iced Latte (İtalya)','Espresso, süt, buz | 360 ml','150 TL','icedLatte','Serinlik ve İtalya’nın zarafeti!')">
+    Iced Latte (İtalya) <span>150 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Iced Caramel Latte (İtalya)','Espresso, süt, buz, karamel şurubu | 360 ml','200 TL','icedCaramel','Tatlı serinlik, karamel dokunuşu!')">
+    Iced Caramel Latte (İtalya) <span>200 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Iced Vanilla Latte (ABD)','Espresso, süt, buz, vanilya şurubu | 360 ml','200 TL','icedVanilla','Vanilya aromasıyla ferah bir keyif!')">
+    Iced Vanilla Latte (ABD) <span>200 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Iced Americano (ABD)','Espresso, soğuk su, buz | 360 ml','200 TL','icedAmericano','Amerikan tarzı buz gibi kahve!')">
+    Iced Americano (ABD) <span>200 TL</span>
+  </div>
+
+  <div class="item" onclick="pop('Iced Mocha (Yemen)','Espresso, çikolata sosu, buz, soğuk süt | 360 ml','200 TL','icedMocha','Çikolata ve kahvenin buz gibi buluşması!')">
+    Iced Mocha (Yemen) <span>200 TL</span>
+  </div>
+</div>
+
+
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+<div class="popup-box">
+<div id="cup"></div>
+<h3 id="t"></h3>
+<p id="d"></p>
+<strong id="p"></strong>
+<p id="quote"></p>
+<br><br>
+<button onclick="closePop()">Kapat</button>
+</div>
+</div>
+
+<script>
+function page(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function pop(t,d,p,type,quote){
+  document.getElementById("popup").style.display="block";
+  document.getElementById("t").innerText=t;
+  document.getElementById("d").innerText=d;
+  document.getElementById("p").innerText=p;
+  document.getElementById("quote").innerText=quote;
+  drawCup(type);
+}
+
+function closePop(){document.getElementById("popup").style.display="none";}
+
+function drawCup(type){
+  let svg="";
+if(type==="espresso"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="70" width="40" height="30" fill="#5c3a21"/>
+    <rect x="40" y="40" width="40" height="60" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+
+// Doppio
+else if(type==="doppio"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="35" y="60" width="50" height="40" fill="#5c3a21"/>
+    <rect x="35" y="30" width="50" height="70" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+
+// Cappuccino
+else if(type==="cappuccino"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="30" y="70" width="60" height="30" fill="#5c3a21"/>
+    <rect x="30" y="50" width="60" height="20" fill="#f4e3c1"/>
+    <rect x="30" y="30" width="60" height="20" fill="#fff8e7"/>
+    <rect x="30" y="20" width="60" height="80" stroke="#333" fill="none" rx="10"/>
+  </svg>`;
+}
+
+// Latte
+else if(type==="latte"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="30" y="80" width="60" height="20" fill="#5c3a21"/>
+    <rect x="30" y="40" width="60" height="40" fill="#f4e3c1"/>
+    <rect x="30" y="20" width="60" height="80" stroke="#333" fill="none" rx="10"/>
+  </svg>`;
+}
+
+// Crema
+else if(type==="crema"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="35" y="70" width="50" height="30" fill="#5c3a21"/>
+    <rect x="35" y="60" width="50" height="10" fill="#d2a679"/>
+    <rect x="35" y="30" width="50" height="70" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+
+// Grande
+else if(type==="grande"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="30" y="60" width="60" height="40" fill="#5c3a21"/>
+    <rect x="30" y="30" width="60" height="70" stroke="#333" fill="none" rx="10"/>
+  </svg>`;
+}
+
+// XL
+else if(type==="xl"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="25" y="70" width="70" height="30" fill="#5c3a21"/>
+    <rect x="25" y="50" width="70" height="20" fill="#f4e3c1"/>
+    <rect x="25" y="30" width="70" height="70" stroke="#333" fill="none" rx="12"/>
+  </svg>`;
+}
+
+
+
+else if(type==="italy"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="30" y="40" width="20" height="60" fill="green"/>
+    <rect x="50" y="40" width="20" height="60" fill="white"/>
+    <rect x="70" y="40" width="20" height="60" fill="red"/>
+    <rect x="30" y="40" width="60" height="60" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+
+else if(type==="austriaBrauner" || type==="austriaMelange"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="30" y="40" width="60" height="20" fill="red"/>
+    <rect x="30" y="60" width="60" height="20" fill="white"/>
+    <rect x="30" y="80" width="60" height="20" fill="red"/>
+    <rect x="30" y="40" width="60" height="60" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+
+else if(type==="france"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="30" y="40" width="20" height="60" fill="blue"/>
+    <rect x="50" y="40" width="20" height="60" fill="white"/>
+    <rect x="70" y="40" width="20" height="60" fill="red"/>
+    <rect x="30" y="40" width="60" height="60" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+
+else if(type==="usa"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="30" y="40" width="60" height="60" fill="white"/>
+    <rect x="30" y="40" width="60" height="10" fill="red"/>
+    <rect x="30" y="60" width="60" height="10" fill="red"/>
+    <rect x="30" y="80" width="60" height="10" fill="red"/>
+    <rect x="30" y="40" width="25" height="25" fill="blue"/>
+    <circle cx="35" cy="45" r="2" fill="white"/>
+    <circle cx="40" cy="50" r="2" fill="white"/>
+    <circle cx="45" cy="55" r="2" fill="white"/>
+    <rect x="30" y="40" width="60" height="60" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+
+
+else if(type==="turkFincan"){
+  svg=`<svg viewBox="0 0 120 120">
+    <circle cx="60" cy="70" r="25" fill="#5c3a21"/> <!-- kahve -->
+    <circle cx="60" cy="70" r="25" stroke="#333" fill="none"/>
+    <rect x="85" y="60" width="15" height="20" rx="8" stroke="#333" fill="none"/> <!-- kulp -->
+  </svg>`;
+}
+
+else if(type==="suvari"){
+  svg=`<svg viewBox="0 0 100 120">
+    <polygon points="40,40 60,40 70,100 30,100" fill="#5c3a21"/>
+    <polygon points="40,40 60,40 70,100 30,100" stroke="#333" fill="none"/>
+  </svg>`;
+}
+else if(type==="cay"){
+  svg=`<svg viewBox="0 0 100 120">
+    <polygon points="40,40 60,40 70,100 30,100" fill="#a52a2a"/>
+    <polygon points="40,40 60,40 70,100 30,100" stroke="#333" fill="none"/>
+  </svg>`;
+}
+else if(type==="cayKupa"){
+  svg=`<svg viewBox="0 0 100 120">
+    <rect x="30" y="40" width="40" height="60" fill="#a52a2a"/>
+    <rect x="30" y="40" width="40" height="60" stroke="#333" fill="none" rx="8"/>
+  </svg>`;
+}
+else if(type==="limonata"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#f7e94c" stroke="#333" rx="8"/> <!-- bardak -->
+    <rect x="45" y="40" width="10" height="10" fill="#fff" rx="2"/> <!-- buz -->
+    <rect x="55" y="55" width="10" height="10" fill="#fff" rx="2"/> <!-- buz -->
+    <circle cx="70" cy="35" r="6" fill="green"/> <!-- nane yaprağı -->
+  </svg>`;
+}
+
+else if(type==="cola"){
+  svg=`<svg viewBox="0 0 100 120">
+    <rect x="35" y="30" width="30" height="70" fill="red"/>
+    <rect x="35" y="30" width="30" height="70" stroke="#333" fill="none"/>
+    <rect x="35" y="60" width="30" height="10" fill="white"/> <!-- şerit -->
+  </svg>`;
+}
+else if(type==="mozaik"){
+  svg=`<svg viewBox="0 0 100 120">
+    <polygon points="30,40 70,40 50,90" fill="url(#zebra)"/>
+    <polygon points="30,40 70,40 50,90" stroke="#333" fill="none"/>
+    <defs>
+      <pattern id="zebra" width="10" height="10" patternUnits="userSpaceOnUse">
+        <rect width="10" height="5" fill="#5c3a21"/>
+        <rect y="5" width="10" height="5" fill="#fff"/>
+      </pattern>
+    </defs>
+  </svg>`;
+}
+
+else if(type==="icedLatte"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#f5f5dc" stroke="#333" rx="8"/>
+    <rect x="45" y="40" width="10" height="10" fill="#fff" rx="2"/> <!-- buz -->
+    <rect x="55" y="55" width="10" height="10" fill="#fff" rx="2"/> <!-- buz -->
+  </svg>`;
+}
+else if(type==="icedCaramel"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#f5f5dc" stroke="#333" rx="8"/>
+    <rect x="45" y="40" width="10" height="10" fill="#fff" rx="2"/>
+    <rect x="55" y="55" width="10" height="10" fill="#fff" rx="2"/>
+    <rect x="40" y="30" width="40" height="10" fill="#c68e17"/> <!-- karamel şerit -->
+  </svg>`;
+}
+else if(type==="icedVanilla"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#f5f5dc" stroke="#333" rx="8"/>
+    <rect x="45" y="40" width="10" height="10" fill="#fff" rx="2"/>
+    <rect x="55" y="55" width="10" height="10" fill="#fff" rx="2"/>
+    <circle cx="70" cy="35" r="6" fill="#fff8dc" stroke="#333"/> <!-- vanilya çiçeği -->
+  </svg>`;
+}
+else if(type==="icedAmericano"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#6f4e37" stroke="#333" rx="8"/>
+    <rect x="45" y="40" width="10" height="10" fill="#fff" rx="2"/>
+    <rect x="55" y="55" width="10" height="10" fill="#fff" rx="2"/>
+  </svg>`;
+}
+else if(type==="icedMocha"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#8b4513" stroke="#333" rx="8"/>
+    <rect x="45" y="40" width="10" height="10" fill="#fff" rx="2"/>
+    <rect x="55" y="55" width="10" height="10" fill="#fff" rx="2"/>
+    <rect x="40" y="60" width="40" height="10" fill="#d2691e"/> <!-- çikolata sosu -->
+  </svg>`;
+}
+
+
+
+
+else if(type==="sodaSade"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#e0f7fa" stroke="#333" rx="8"/>
+    <circle cx="50" cy="50" r="5" fill="#fff"/> <!-- kabarcık -->
+    <circle cx="65" cy="60" r="4" fill="#fff"/>
+  </svg>`;
+}
+else if(type==="sodaMeyveli"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#ffe0b2" stroke="#333" rx="8"/>
+    <circle cx="50" cy="50" r="5" fill="#fff"/>
+    <circle cx="65" cy="60" r="4" fill="#fff"/>
+    <circle cx="70" cy="35" r="6" fill="red"/> <!-- meyve -->
+  </svg>`;
+}
+else if(type==="churchill"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#e0f7fa" stroke="#333" rx="8"/>
+    <circle cx="50" cy="50" r="5" fill="#fff"/>
+    <circle cx="65" cy="60" r="4" fill="#fff"/>
+    <circle cx="70" cy="35" r="6" fill="yellow"/> <!-- limon -->
+  </svg>`;
+}
+else if(type==="jussTea" || type==="fuseTea"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#a52a2a" stroke="#333" rx="8"/>
+    <circle cx="50" cy="50" r="5" fill="#fff"/>
+  </svg>`;
+}
+else if(type==="cappy"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#ffcc80" stroke="#333" rx="8"/>
+    <circle cx="70" cy="35" r="6" fill="orange"/> <!-- meyve -->
+  </svg>`;
+}
+else if(type==="su"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#bbdefb" stroke="#333" rx="8"/>
+  </svg>`;
+}
+else if(type==="bitkiCay"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#c5e1a5" stroke="#333" rx="8"/>
+    <circle cx="70" cy="35" r="6" fill="green"/> <!-- yaprak -->
+  </svg>`;
+}
+else if(type==="yesilCay"){
+  svg=`<svg viewBox="0 0 120 120">
+    <rect x="40" y="30" width="40" height="70" fill="#81c784" stroke="#333" rx="8"/>
+  </svg>`;
+}
+else if(type==="kupaSet"){
+  svg=`<svg viewBox="0 0 120 120">
+    <!-- Kutu -->
+    <rect x="30" y="30" width="60" height="60" fill="#fff" stroke="#333" rx="8"/>
+    <!-- Kahve hediyesi efekti -->
+    <rect x="30" y="30" width="60" height="60" fill="#a52a2a" opacity="0.3"/>
+    
+    <!-- Kurdele dikey şerit -->
+    <rect x="55" y="30" width="10" height="60" fill="#d32f2f"/>
+    <!-- Kurdele yatay şerit -->
+    <rect x="30" y="55" width="60" height="10" fill="#d32f2f"/>
+    
+    <!-- Kurdele fiyonk -->
+    <circle cx="60" cy="55" r="6" fill="#d32f2f" stroke="#333"/>
+    <polygon points="54,55 48,48 52,55" fill="#d32f2f"/>
+    <polygon points="66,55 72,48 68,55" fill="#d32f2f"/>
+  </svg>`;
+}
+
+else if(type==="tatliTuzlu"){
+  svg=`<svg viewBox="0 0 120 120">
+    <circle cx="50" cy="60" r="10" fill="#d2691e"/> <!-- tuzlu -->
+    <circle cx="70" cy="60" r="10" fill="#ffccbc"/> <!-- tatlı -->
+  </svg>`;
+}
+
+
+
+
+  else{
+    svg=`<svg viewBox="0 0 100 120">
+      <circle cx="50" cy="60" r="40" fill="#ccc"/>
+    </svg>`;
+  }
+  document.getElementById("cup").innerHTML=svg;
+}
+</script>
+
+</body>
+</html>
